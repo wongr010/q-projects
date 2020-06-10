@@ -39,14 +39,17 @@ if __name__ == "__main__":
 
     b=[starting_CT[0:16], starting_CT[16:32], starting_CT[32:48]]
     iv_string=''.join(format(x, '02x') for x in iv)
-    m=[[], [], [], []]
+    m=[]
 
-    for index in range(0, len(b)):
+    for index in range(len(b)):
         m.append([])
+
         guess=[0]*16
         for j in range(1, 17):
+            pad=j
             print(j)
-            pad = [0] * (16-j) + [j]*j
+            pad = [0] * (16-j) + [pad]*j
+            exited=False
 
             for i in range(128):
 
@@ -55,24 +58,36 @@ if __name__ == "__main__":
 
                 else:
                     c_prime=iv.copy()
+
                 guess[16-j]=i
-                    
+                
+
                 for k in range(0, 16):
                     
                     c_prime[k]= int(c_prime[k]) ^ guess[k] ^ pad[k]
 
                 b1_string=''.join(format(x, '02x') for x in c_prime)
-                
+                end_string=''.join(format(x, '02x') for x in b[index])
+
                 if index>0:
-                    query_string=iv_string+stringify_blocks(b[:index-1])+b1_string+''.join(format(x, '02x') for x in b[index])
+                    query_string=iv_string+stringify_blocks(b[:index-1])+b1_string+end_string
                 
                 if index == 0:
-                     query_string=b1_string+''.join(format(x, '02x') for x in b[index])
+                     query_string=b1_string+end_string
 
                 test=po.query(query_string)
                 
                 if test:
+                   exited=True
                    m[index].insert(0, chr(i))
                    print(m[index])
                    break
+
+            if not exited: #means that this is the start of the real padding
+                guess[16-j]= j
+
+            
+
     print(m)
+
+
