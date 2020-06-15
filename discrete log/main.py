@@ -39,7 +39,16 @@ for i in range(int(B)):
   x.start()
   x.join()	
 
+for i in range(int(B)):
+	key=pow(g, i*B, p)
+	if hash_table[key] is not None:
+		x1=hash_table[key]
+		x0=i
+		break
 
+
+x=B*x0+x1
+print(x)
 
  
 
